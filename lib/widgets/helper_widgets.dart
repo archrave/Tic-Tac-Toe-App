@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum ButtonMarker { player, computer, available }
+
 class CustomButton extends StatelessWidget {
   const CustomButton({
     this.width = 0,

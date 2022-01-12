@@ -1,5 +1,9 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:tic_tac_toe_app/widgets/helper_widgets.dart';
+import '../widgets/griditem.dart';
+import '../widgets/helper_widgets.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({Key? key}) : super(key: key);
@@ -10,45 +14,93 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  bool val = true;
+  Future<bool> _onBackButtonPressed() async {
+    return await showDialog(
+            context: context,
+            builder: (context) {
+              return const ExitGameDialog();
+            }) ??
+        false;
+  }
+
+  void _buttonSelected() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
+    final _deviceWidth = MediaQuery.of(context).size.width;
+    final _deviceHeight =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return WillPopScope(
-      onWillPop: () async {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                  title: Text(
-                    'Quit',
-                    style: Theme.of(context).primaryTextTheme.headline2,
-                  ),
-                  content: Text(
-                    'Are you sure you want to quit the game? Your progress will not be saved',
-                    style: Theme.of(context).primaryTextTheme.bodyText2,
-                  ),
-                  actions: [
-                    CustomButton(
-                        child: Text('YES'),
-                        onPressed: () {
-                          val = true;
-                          Navigator.of(context).pop();
-                        }),
-                    TextButton(
-                      child: Text('NO'),
-                      onPressed: () {
-                        val = false;
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ]);
-            });
-        return val;
-      },
+      onWillPop: _onBackButtonPressed,
       child: Scaffold(
         body: Center(
-          child: Text('game'),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Player',
+                              style:
+                                  Theme.of(context).primaryTextTheme.headline2,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Text(
+                            'VS',
+                            style: Theme.of(context).primaryTextTheme.bodyText2,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Computer',
+                              style:
+                                  Theme.of(context).primaryTextTheme.headline2,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+                Stack(children: [
+                  Container(
+                    // padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      // color: Colors.red.withOpacity(0.4),
+                    ),
+                    height: _deviceWidth - 40,
+                    child: GridView.builder(
+                        padding: const EdgeInsets.all(0),
+                        semanticChildCount: 9,
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 1 / 3 * (_deviceWidth),
+                          // maxCrossAxisExtent: 353 / 3,
+                        ),
+                        itemCount: 9,
+                        itemBuilder: (ctx, i) {
+                          return GridItem(index: i);
+                        }),
+                  ),
+                  VerticalLines(deviceWidth: _deviceWidth),
+                  HorizontalLines(deviceWidth: _deviceWidth)
+                ]),
+                const Spacer(),
+              ],
+            ),
+          ),
         ),
       ),
     );

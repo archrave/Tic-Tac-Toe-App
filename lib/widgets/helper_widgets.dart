@@ -59,3 +59,102 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
+
+class HorizontalLines extends StatelessWidget {
+  const HorizontalLines({
+    Key? key,
+    required double deviceWidth,
+  })  : _deviceWidth = deviceWidth,
+        super(key: key);
+
+  final double _deviceWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      // left: 1 / 3 * (_deviceWidth - 40),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: ((_deviceWidth - 40) / 3)),
+          Container(
+            width: _deviceWidth - 40,
+            height: 2,
+            color: Colors.black.withOpacity(0.2),
+          ),
+          SizedBox(height: ((_deviceWidth - 40) / 3) - 2.5),
+          Container(
+            width: _deviceWidth - 40,
+            height: 2,
+            color: Colors.black.withOpacity(0.2),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class VerticalLines extends StatelessWidget {
+  const VerticalLines({
+    Key? key,
+    required double deviceWidth,
+  })  : _deviceWidth = deviceWidth,
+        super(key: key);
+
+  final double _deviceWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      // right: 2,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            height: _deviceWidth - 40,
+            width: 2,
+            color: Colors.black.withOpacity(0.2),
+          ),
+          Container(
+            height: _deviceWidth - 40,
+            width: 2,
+            color: Colors.black.withOpacity(0.2),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ExitGameDialog extends StatelessWidget {
+  const ExitGameDialog({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        'Quit',
+        style: Theme.of(context).primaryTextTheme.headline2,
+      ),
+      content: Text(
+        'Are you sure you want to quit the game? Your progress will not be saved',
+        style: Theme.of(context)
+            .primaryTextTheme
+            .bodyText2!
+            .copyWith(fontSize: 14),
+      ),
+      actions: [
+        ElevatedButton(
+          child: Text('YES'),
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+        TextButton(
+          child: Text('NO'),
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+      ],
+    );
+  }
+}

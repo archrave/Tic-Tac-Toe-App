@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           headline2: GoogleFonts.poppins(
             fontSize: 21,
             color: Colors.black,
-            // fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
           bodyText2: GoogleFonts.poppins(
             fontSize: 16,

@@ -114,9 +114,7 @@ class _GameScreenState extends State<GameScreen> {
       return;
     }
     // Asking to announce a draw
-    else if (_availableSpaces.isEmpty) {
-      _announceWinner(ButtonMarker.available);
-    } else if (checkRow(0)) {
+    else if (checkRow(0)) {
       _announceWinner(board[0]);
     } else if (checkRow(3)) {
       _announceWinner(board[3]);
@@ -135,12 +133,15 @@ class _GameScreenState extends State<GameScreen> {
     }
     //Checking for Diagonal 2
     else if (board[2] == board[4] && board[4] == board[6]) {
-      _announceWinner(board[0]);
+      _announceWinner(board[2]);
+    } else if (_availableSpaces.isEmpty) {
+      dev.log('######################Avialable spaces = $_availableSpaces');
+      _announceWinner(ButtonMarker.available);
     }
   }
 
 // Annouces the winner
-  void _announceWinner(ButtonMarker marker) {
+  void _announceWinner(ButtonMarker marker) async {
     if (marker == ButtonMarker.available) {
       _winnerMessage = 'Draw!';
     } else if (marker == ButtonMarker.player) {
@@ -149,6 +150,7 @@ class _GameScreenState extends State<GameScreen> {
       _winnerMessage = 'Computer Wins';
     }
     dev.log('\n *************** $_winnerMessage ***************\n');
+    await Future.delayed(Duration(milliseconds: 300));
     setState(() {
       _isMatchFinished = true;
     });
@@ -157,21 +159,27 @@ class _GameScreenState extends State<GameScreen> {
   // Helper function to check if a row is entirely marked by anyone
   bool checkRow(int firstIndex) {
     return (board[firstIndex] == board[firstIndex + 1]) &&
-        (board[firstIndex + 1] == board[firstIndex + 2]);
+        (board[firstIndex + 1] == board[firstIndex + 2]) &&
+        (board[firstIndex] != ButtonMarker.available);
   }
 
   // Helper function to check if a column is entirely marked by anyone
   bool checkColumn(int firstIndex) {
     return (board[firstIndex] == board[firstIndex + 3]) &&
-        (board[firstIndex + 3] == board[firstIndex + 6]);
+        (board[firstIndex + 3] == board[firstIndex + 6]) &&
+        (board[firstIndex] != ButtonMarker.available);
   }
 
 // Function to reset the game board.
   void _resetBoard() {
+    _isMatchFinished = false;
     board = [];
+    _availableSpaces = [];
     for (int i = 0; i < 9; i++) {
       board.add(ButtonMarker.available);
+      _availableSpaces.add(i);
     }
+
     dev.log(board.toString());
   }
 
@@ -291,17 +299,16 @@ class _GameScreenState extends State<GameScreen> {
                           style: Theme.of(context).primaryTextTheme.headline1),
                       const SizedBox(height: 20),
                       CustomButton(
-                        width: 200 / 393 * _deviceWidth,
-                        height: 50,
-                        child: Text(
-                          'Restart Game',
-                          style: Theme.of(context)
-                              .primaryTextTheme
-                              .bodyText2!
-                              .copyWith(color: Colors.white),
-                        ),
-                        onPressed: () {},
-                      ),
+                          width: 200 / 393 * _deviceWidth,
+                          height: 50,
+                          child: Text(
+                            'Restart Game',
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .headline2!
+                                .copyWith(color: Colors.white),
+                          ),
+                          onPressed: _restartGame),
                       const SizedBox(height: 20),
                       CustomButton(
                         width: 200 / 393 * _deviceWidth,
@@ -310,7 +317,7 @@ class _GameScreenState extends State<GameScreen> {
                           'Main Menu',
                           style: Theme.of(context)
                               .primaryTextTheme
-                              .bodyText2!
+                              .headline2!
                               .copyWith(color: Colors.white),
                         ),
                         onPressed: () {},

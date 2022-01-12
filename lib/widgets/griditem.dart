@@ -31,7 +31,7 @@ class _GridItemState extends State<GridItem> {
               ? Icon(Icons.circle_outlined,
                   size: 70 / 393 * _deviceWidth, color: Colors.red)
               : InkWell(
-                  child: Text('box ${widget.index}'),
+                  child: const SizedBox.shrink(),
                   onTap: () {
                     widget.buttonSelected(widget.index);
                   },

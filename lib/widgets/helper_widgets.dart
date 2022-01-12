@@ -141,7 +141,7 @@ class ExitGameDialog extends StatelessWidget {
         style: Theme.of(context).primaryTextTheme.headline2,
       ),
       content: Text(
-        'Are you sure you want to quit the game? Your progress will not be saved',
+        'Are you sure you want to exit the game? Your progress will not be saved',
         style: Theme.of(context)
             .primaryTextTheme
             .bodyText2!

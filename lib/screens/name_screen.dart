@@ -11,6 +11,13 @@ class NameScreen extends StatefulWidget {
 
 class _NameScreenState extends State<NameScreen> {
   final TextEditingController? _nameController = TextEditingController();
+  final _nameFormKey = GlobalKey<FormState>();
+  void _submitName() {
+    if (!_nameFormKey.currentState!.validate()) {
+      return;
+    }
+    Navigator.of(context).pushReplacementNamed(WelcomeScreen.routeName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,28 +45,36 @@ class _NameScreenState extends State<NameScreen> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 10.0),
-                    child: TextField(
-                      controller: _nameController,
-                      style: Theme.of(context)
-                          .primaryTextTheme
-                          .bodyText2!
-                          .copyWith(
-                            color: Colors.black.withOpacity(0.8),
-                            letterSpacing: 1,
-                          ),
-                      decoration: InputDecoration(
-                        isDense: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        hintText: 'Your Name',
-                        hintStyle: Theme.of(context)
-                            .primaryTextTheme
-                            .bodyText2!
-                            .copyWith(
-                              color: Colors.black.withOpacity(0.5),
+                    child: Form(
+                      key: _nameFormKey,
+                      child: TextFormField(
+                          controller: _nameController,
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .bodyText2!
+                              .copyWith(
+                                color: Colors.black.withOpacity(0.8),
+                                letterSpacing: 1,
+                              ),
+                          decoration: InputDecoration(
+                            isDense: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
                             ),
-                      ),
+                            hintText: 'Your Name',
+                            hintStyle: Theme.of(context)
+                                .primaryTextTheme
+                                .bodyText2!
+                                .copyWith(
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a name';
+                            } else
+                              return null;
+                          }),
                     ),
                   ),
                 ),
@@ -68,12 +83,7 @@ class _NameScreenState extends State<NameScreen> {
                     height: 55,
                     borderRadius: 50,
                     child: const Icon(Icons.arrow_forward),
-                    onPressed: (_nameController!.text == '')
-                        ? null
-                        : () {
-                            Navigator.of(context)
-                                .pushReplacementNamed(WelcomeScreen.routeName);
-                          }),
+                    onPressed: _submitName),
               ],
             ),
           ),

@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './helper_widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GameOverMenu extends StatelessWidget {
   const GameOverMenu({
@@ -7,59 +9,103 @@ class GameOverMenu extends StatelessWidget {
     required this.winnerMessage,
     required this.deviceWidth,
     required this.resetBoard,
+    required this.exitToMainMenu,
+    required this.exitToHomeScreen,
   }) : super(key: key);
 
   final String winnerMessage;
   final double deviceWidth;
   final VoidCallback? resetBoard;
+  final Function()? exitToMainMenu;
+  final Function()? exitToHomeScreen;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(winnerMessage,
-              style: Theme.of(context).primaryTextTheme.headline1),
-          const SizedBox(height: 20),
-          CustomButton(
-            width: 200 / 393 * deviceWidth,
-            height: 50,
-            child: Text(
-              'Restart Game',
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .headline2!
-                  .copyWith(color: Colors.white),
+          Expanded(
+            flex: 2,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    onPressed: exitToMainMenu,
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      winnerMessage,
+                      style: Theme.of(context)
+                          .primaryTextTheme
+                          .headline1!
+                          .copyWith(
+                            fontSize: 32,
+                          ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
             ),
-            onPressed: resetBoard,
           ),
-          const SizedBox(height: 20),
-          CustomButton(
-              width: 200 / 393 * deviceWidth,
-              height: 50,
-              child: Text(
-                'Main Menu',
-                style: Theme.of(context)
-                    .primaryTextTheme
-                    .headline2!
-                    .copyWith(color: Colors.white),
-              ),
-              onPressed: () async {
-                final doExit = await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return const ExitGameDialog(
-                            title: 'Exit Game',
-                            content:
-                                'Are you sure you want to quit to main menu?',
-                          );
-                        }) ??
-                    false;
-                if (doExit) {
-                  Navigator.of(context).pop();
-                }
-              }),
+          Expanded(
+            flex: 3,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    DarkIconButton(
+                      onPressed: resetBoard,
+                      icon: const Icon(FontAwesomeIcons.redo),
+                      size: 80,
+                    ),
+                    DarkIconButton(
+                      onPressed: () {},
+                      icon: FittedBox(
+                        fit: BoxFit.cover,
+                        child: Text(
+                          '?',
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .headline1!
+                              .copyWith(
+                                fontSize: 40,
+                                color: Colors.white,
+                              ),
+                        ),
+                      ),
+                      size: 80,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 60),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    DarkIconButton(
+                      onPressed: exitToMainMenu,
+                      icon: const Icon(Icons.home),
+                      size: 80,
+                    ),
+                    DarkIconButton(
+                      onPressed: exitToHomeScreen,
+                      icon: const Icon(Icons.exit_to_app),
+                      size: 80,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

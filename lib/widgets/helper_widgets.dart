@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 enum ButtonMarker { player, computer, available }
@@ -17,8 +20,8 @@ class CustomButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final double borderRadius;
 
-  final color1 = const Color(0xFF335BF9);
-  final color2 = const Color(0xFF379BF3);
+  final color1 = const Color(0xFF6B79F2);
+  final color2 = const Color(0xFF4351D8);
 
   @override
   Widget build(BuildContext context) {
@@ -73,24 +76,28 @@ class HorizontalLines extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double gridItemSize = (_deviceWidth - 80) / 3;
     return Positioned(
-      // left: 1 / 3 * (_deviceWidth - 40),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: ((_deviceWidth - 40) / 3)),
-          Container(
-            width: _deviceWidth - 40,
-            height: 2,
-            color: Colors.black.withOpacity(0.2),
-          ),
-          SizedBox(height: ((_deviceWidth - 40) / 3) - 2.5),
-          Container(
-            width: _deviceWidth - 40,
-            height: 2,
-            color: Colors.black.withOpacity(0.2),
-          ),
-        ],
+      left: 10,
+      top: 10,
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: gridItemSize - 2),
+            Container(
+              width: _deviceWidth - 80,
+              height: 2,
+              color: Colors.black.withOpacity(0.2),
+            ),
+            SizedBox(height: (gridItemSize) - 2),
+            Container(
+              width: _deviceWidth - 80,
+              height: 2,
+              color: Colors.black.withOpacity(0.2),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -109,20 +116,25 @@ class VerticalLines extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       // right: 2,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            height: _deviceWidth - 40,
-            width: 2,
-            color: Colors.black.withOpacity(0.2),
-          ),
-          Container(
-            height: _deviceWidth - 40,
-            width: 2,
-            color: Colors.black.withOpacity(0.2),
-          ),
-        ],
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        // color: Colors.green,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: _deviceWidth - 80,
+              width: 2,
+              color: Colors.black.withOpacity(0.2),
+            ),
+            Container(
+              height: _deviceWidth - 80,
+              width: 2,
+              color: Colors.black.withOpacity(0.2),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -133,9 +145,11 @@ class ExitGameDialog extends StatelessWidget {
     Key? key,
     required this.title,
     required this.content,
+    this.exitToHomeScreen = false,
   }) : super(key: key);
 
   final String title;
+  final bool exitToHomeScreen;
   final String content;
   @override
   Widget build(BuildContext context) {
@@ -154,11 +168,27 @@ class ExitGameDialog extends StatelessWidget {
       actions: [
         ElevatedButton(
           child: const Text('YES'),
-          onPressed: () => Navigator.of(context).pop(true),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              Theme.of(context).primaryColor,
+            ),
+          ),
+          onPressed: () {
+            if (!exitToHomeScreen) {
+              return Navigator.of(context).pop(true);
+            } else {
+              exit(0);
+            }
+          },
         ),
         TextButton(
           child: const Text('NO'),
           onPressed: () => Navigator.of(context).pop(false),
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all(
+              Theme.of(context).primaryColor,
+            ),
+          ),
         ),
       ],
     );
@@ -176,40 +206,78 @@ class PlayerVsComputer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Expanded(
-              child: Text(
-                _playerName,
-                style: Theme.of(context)
-                    .primaryTextTheme
-                    .headline2!
-                    .copyWith(color: Colors.blueAccent),
-                textAlign: TextAlign.center,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Text(
+                  _playerName,
+                  style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
+                        color: Theme.of(context).colorScheme.primaryVariant,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
-            Text(
-              'VS',
-              style: Theme.of(context).primaryTextTheme.bodyText2,
-            ),
-            Expanded(
-              child: Text(
-                'Computer',
-                style: Theme.of(context)
-                    .primaryTextTheme
-                    .headline2!
-                    .copyWith(color: Colors.redAccent),
-                textAlign: TextAlign.center,
+              Expanded(
+                child: Text(
+                  'vs',
+                  style: Theme.of(context).primaryTextTheme.headline1,
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-      ],
+              Expanded(
+                flex: 2,
+                child: Text(
+                  'Computer',
+                  style: Theme.of(context).primaryTextTheme.headline2!.copyWith(
+                        color: Theme.of(context).colorScheme.secondaryVariant,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+class DarkIconButton extends StatelessWidget {
+  const DarkIconButton({
+    required this.onPressed,
+    required this.icon,
+    required this.size,
+  });
+
+  final void Function()? onPressed;
+  final Widget icon;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Ink(
+      width: size,
+      height: size,
+      decoration: ShapeDecoration(
+        color: Theme.of(context).primaryColor,
+        shape: const CircleBorder(),
+      ),
+      child: IconButton(
+        onPressed: onPressed,
+        icon: icon,
+        iconSize: 40,
+        color: Colors.white,
+
+        // splashColor: Colors.blueGrey,
+      ),
     );
   }
 }

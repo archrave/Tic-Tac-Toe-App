@@ -1,8 +1,9 @@
-import 'dart:developer' as dev;
 import 'dart:io';
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../widgets/helper_widgets.dart';
 import '../widgets/griditem.dart';
@@ -23,11 +24,41 @@ class _GameScreenState extends State<GameScreen> {
             context: context,
             builder: (context) {
               return const ExitGameDialog(
+                title: 'Quit Game',
+                content: 'Are you sure you want to exit the game?',
+              );
+            }) ??
+        false;
+  }
+
+  Future<void> _exitToMenu() async {
+    final doExit = await showDialog(
+            context: context,
+            builder: (context) {
+              return const ExitGameDialog(
                 title: 'Exit Game',
                 content: 'Are you sure you want to quit to main menu?',
               );
             }) ??
         false;
+    if (doExit) {
+      Navigator.of(context).pop();
+    }
+  }
+
+  Future<void> _exitToHomeScreen() async {
+    final doExit = await showDialog(
+            context: context,
+            builder: (context) {
+              return const ExitGameDialog(
+                title: 'Quit Game',
+                content: 'Are you sure you want to exit the game?',
+              );
+            }) ??
+        false;
+    if (doExit) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _restartGame() {
@@ -162,7 +193,7 @@ class _GameScreenState extends State<GameScreen> {
       _winnerMessage = 'Computer Wins!';
     }
     dev.log('\n *************** $_winnerMessage ***************\n');
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     setState(() {
       _isMatchFinished = true;
     });
@@ -193,8 +224,6 @@ class _GameScreenState extends State<GameScreen> {
       board.add(ButtonMarker.available);
       _availableSpaces.add(i);
     }
-
-    dev.log(board.toString());
   }
 
   @override
@@ -211,69 +240,99 @@ class _GameScreenState extends State<GameScreen> {
 
     return WillPopScope(
       onWillPop: _onBackButtonPressed,
-      child: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.all(20),
-          child: !_isMatchFinished
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: PlayerVsComputer(playerName: _playerName),
-                    ),
-                    Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          height: _deviceWidth - 40,
-                          child: GridView.builder(
-                              padding: const EdgeInsets.all(0),
-                              semanticChildCount: 9,
-                              gridDelegate:
-                                  SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 1 / 3 * (_deviceWidth),
-                                // maxCrossAxisExtent: 353 / 3,
-                              ),
-                              itemCount: 9,
-                              itemBuilder: (ctx, i) {
-                                return GridItem(
-                                    index: i,
-                                    marker: board[i],
-                                    buttonSelected: _runPlayersTurn);
-                              }),
-                        ),
-                        VerticalLines(deviceWidth: _deviceWidth),
-                        HorizontalLines(deviceWidth: _deviceWidth)
-                      ],
-                    ),
-                    Expanded(
-                      child: Column(
+      child: SafeArea(
+        child: Scaffold(
+          body: Container(
+            padding: const EdgeInsets.all(20),
+            child: !_isMatchFinished
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const SizedBox(height: 50),
-                          CustomButton(
-                            width: 100 / 393 * _deviceWidth,
-                            height: 50,
-                            child: Text(
-                              'Restart',
-                              style: Theme.of(context)
-                                  .primaryTextTheme
-                                  .bodyText2!
-                                  .copyWith(color: Colors.white),
+                          IconButton(
+                            onPressed: _exitToMenu,
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Theme.of(context).primaryColor,
                             ),
-                            onPressed: _restartGame,
                           ),
-                          Spacer(),
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              FontAwesomeIcons.question,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                  ],
-                )
-              : GameOverMenu(
-                  winnerMessage: _winnerMessage,
-                  deviceWidth: _deviceWidth,
-                  resetBoard: _resetBoard),
+                      Expanded(
+                        child: PlayerVsComputer(playerName: _playerName),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Stack(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              constraints: const BoxConstraints(
+                                  maxWidth: 500, maxHeight: 500),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              height: _deviceWidth - 60,
+                              child: GridView.builder(
+                                  padding: const EdgeInsets.all(0),
+                                  semanticChildCount: 9,
+                                  gridDelegate:
+                                      SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 1 / 3 * (_deviceWidth),
+                                  ),
+                                  itemCount: 9,
+                                  itemBuilder: (ctx, i) {
+                                    return GridItem(
+                                        index: i,
+                                        marker: board[i],
+                                        buttonSelected: _runPlayersTurn);
+                                  }),
+                            ),
+                            VerticalLines(deviceWidth: _deviceWidth),
+                            HorizontalLines(deviceWidth: _deviceWidth)
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              DarkIconButton(
+                                onPressed: _restartGame,
+                                icon: const Icon(FontAwesomeIcons.redo),
+                                size: 80,
+                              ),
+                              DarkIconButton(
+                                onPressed: _exitToMenu,
+                                icon: const Icon(Icons.home),
+                                size: 80,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : GameOverMenu(
+                    winnerMessage: _winnerMessage,
+                    deviceWidth: _deviceWidth,
+                    resetBoard: _resetBoard,
+                    exitToMainMenu: _exitToMenu,
+                    exitToHomeScreen: _exitToHomeScreen,
+                  ),
+          ),
         ),
       ),
     );

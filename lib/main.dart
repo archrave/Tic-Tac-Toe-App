@@ -31,26 +31,35 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      // theme: ThemeData.light().copyWith(
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: const Color(0xFFC6EFF9),
+        primaryColor: const Color(0xFF1D2571),
+        errorColor: const Color(0xFFF35E67),
+        colorScheme: const ColorScheme.light().copyWith(
+          primary: const Color(0xFF6B79F2),
+          primaryVariant: const Color(0xFF2D3DCB),
+          secondary: const Color(0xFFF35E67),
+          secondaryVariant: const Color(0xFFBE101A),
+        ),
         primaryTextTheme: TextTheme(
           headline1: GoogleFonts.poppins(
             fontSize: 24,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+            color: const Color(0xFF1D2571),
+            fontWeight: FontWeight.w600,
           ),
           headline2: GoogleFonts.poppins(
             fontSize: 21,
-            color: Colors.black,
+            color: const Color(0xFF1D2571),
             fontWeight: FontWeight.w600,
           ),
           bodyText2: GoogleFonts.poppins(
             fontSize: 16,
-            color: Colors.black,
+            color: const Color(0xFF1D2571),
           ),
           bodyText1: GoogleFonts.poppins(
             fontSize: 20,
-            color: Colors.black,
+            color: const Color(0xFF1D2571),
           ),
         ),
       ),

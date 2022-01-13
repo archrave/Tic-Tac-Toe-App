@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'helper_widgets.dart';
 
 class GridItem extends StatefulWidget {
@@ -23,13 +24,27 @@ class _GridItemState extends State<GridItem> {
     final _deviceHeight =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return Container(
-      margin: const EdgeInsets.all(5.0),
-      color: Theme.of(context).scaffoldBackgroundColor,
+      margin: const EdgeInsets.all(6.0),
+      color: Colors.white,
       child: widget.marker == ButtonMarker.player
-          ? Icon(Icons.close, size: 70 / 393 * _deviceWidth, color: Colors.blue)
+          ? Container(
+              height: 50 / 393 * _deviceWidth,
+              width: 50 / 393 * _deviceWidth,
+              child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SvgPicture.asset('assets/images/X.svg')),
+            )
+          // ? Icon(Icons.close, size: 70 / 393 * _deviceWidth, color: Colors.blue)
           : (widget.marker == ButtonMarker.computer
-              ? Icon(Icons.circle_outlined,
-                  size: 70 / 393 * _deviceWidth, color: Colors.red)
+              ? Container(
+                  height: 50 / 393 * _deviceWidth,
+                  width: 50 / 393 * _deviceWidth,
+                  child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: SvgPicture.asset('assets/images/O.svg')),
+                )
+              // Icon(Icons.circle_outlined,
+              //     size: 70 / 393 * _deviceWidth, color: Colors.red)
               : InkWell(
                   child: const SizedBox.shrink(),
                   onTap: () {

@@ -16,7 +16,8 @@ class _NameScreenState extends State<NameScreen> {
     if (!_nameFormKey.currentState!.validate()) {
       return;
     }
-    Navigator.of(context).pushReplacementNamed(WelcomeScreen.routeName);
+    Navigator.of(context).pushReplacementNamed(WelcomeScreen.routeName,
+        arguments: _nameController!.text);
   }
 
   @override

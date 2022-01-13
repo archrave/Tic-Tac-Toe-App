@@ -10,6 +10,13 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  String playerName = '';
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    playerName = ModalRoute.of(context)!.settings.arguments as String;
+  }
+
   @override
   Widget build(BuildContext context) {
     final _deviceWidth = MediaQuery.of(context).size.width;
@@ -40,7 +47,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     .copyWith(color: Colors.white),
               ),
               onPressed: () {
-                Navigator.of(context).pushNamed(GameScreen.routeName);
+                Navigator.of(context)
+                    .pushNamed(GameScreen.routeName, arguments: playerName);
               }),
         ],
       ),

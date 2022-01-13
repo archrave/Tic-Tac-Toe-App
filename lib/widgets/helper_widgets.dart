@@ -131,17 +131,21 @@ class VerticalLines extends StatelessWidget {
 class ExitGameDialog extends StatelessWidget {
   const ExitGameDialog({
     Key? key,
+    required this.title,
+    required this.content,
   }) : super(key: key);
 
+  final String title;
+  final String content;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        'Quit',
+        title,
         style: Theme.of(context).primaryTextTheme.headline2,
       ),
       content: Text(
-        'Are you sure you want to exit the game? Your progress will not be saved',
+        content,
         style: Theme.of(context)
             .primaryTextTheme
             .bodyText2!
@@ -149,13 +153,62 @@ class ExitGameDialog extends StatelessWidget {
       ),
       actions: [
         ElevatedButton(
-          child: Text('YES'),
+          child: const Text('YES'),
           onPressed: () => Navigator.of(context).pop(true),
         ),
         TextButton(
-          child: Text('NO'),
+          child: const Text('NO'),
           onPressed: () => Navigator.of(context).pop(false),
         ),
+      ],
+    );
+  }
+}
+
+class PlayerVsComputer extends StatelessWidget {
+  const PlayerVsComputer({
+    Key? key,
+    required String playerName,
+  })  : _playerName = playerName,
+        super(key: key);
+
+  final String _playerName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: Text(
+                _playerName,
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .headline2!
+                    .copyWith(color: Colors.blueAccent),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Text(
+              'VS',
+              style: Theme.of(context).primaryTextTheme.bodyText2,
+            ),
+            Expanded(
+              child: Text(
+                'Computer',
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .headline2!
+                    .copyWith(color: Colors.redAccent),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
       ],
     );
   }

@@ -20,7 +20,10 @@ class _GameScreenState extends State<GameScreen> {
     return await showDialog(
             context: context,
             builder: (context) {
-              return const ExitGameDialog();
+              return const ExitGameDialog(
+                title: 'Exit Game',
+                content: 'Are you sure you want to quit to main menu?',
+              );
             }) ??
         false;
   }
@@ -35,7 +38,7 @@ class _GameScreenState extends State<GameScreen> {
               style: Theme.of(context).primaryTextTheme.headline2,
             ),
             content: Text(
-              'You sure you wanna restart?',
+              'You sure you want to restart?',
               style: Theme.of(context)
                   .primaryTextTheme
                   .bodyText2!
@@ -66,6 +69,13 @@ class _GameScreenState extends State<GameScreen> {
   List<int> _availableSpaces = [];
   bool _isMatchFinished = false;
   var _winnerMessage = '';
+  var _playerName = '';
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _playerName = ModalRoute.of(context)!.settings.arguments as String;
+  }
 
   // Helper function to count the remaining spaces, so that the computer can mark its turn on one of these.
   void _countAvailbleSpaces() {
@@ -145,9 +155,9 @@ class _GameScreenState extends State<GameScreen> {
     if (marker == ButtonMarker.available) {
       _winnerMessage = 'Draw!';
     } else if (marker == ButtonMarker.player) {
-      _winnerMessage = 'Player Wins!';
+      _winnerMessage = '$_playerName Wins!';
     } else {
-      _winnerMessage = 'Computer Wins';
+      _winnerMessage = 'Computer Wins!';
     }
     dev.log('\n *************** $_winnerMessage ***************\n');
     await Future.delayed(Duration(milliseconds: 300));
@@ -172,7 +182,9 @@ class _GameScreenState extends State<GameScreen> {
 
 // Function to reset the game board.
   void _resetBoard() {
-    _isMatchFinished = false;
+    setState(() {
+      _isMatchFinished = false;
+    });
     board = [];
     _availableSpaces = [];
     for (int i = 0; i < 9; i++) {
@@ -204,49 +216,13 @@ class _GameScreenState extends State<GameScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Column(
-                        children: [
-                          Spacer(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Player',
-                                  style: Theme.of(context)
-                                      .primaryTextTheme
-                                      .headline2,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              Text(
-                                'VS',
-                                style: Theme.of(context)
-                                    .primaryTextTheme
-                                    .bodyText2,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Computer',
-                                  style: Theme.of(context)
-                                      .primaryTextTheme
-                                      .headline2,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
+                      child: PlayerVsComputer(playerName: _playerName),
                     ),
                     Stack(
                       children: [
                         Container(
-                          // padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            // color: Colors.red.withOpacity(0.4),
                           ),
                           height: _deviceWidth - 40,
                           child: GridView.builder(
@@ -299,29 +275,43 @@ class _GameScreenState extends State<GameScreen> {
                           style: Theme.of(context).primaryTextTheme.headline1),
                       const SizedBox(height: 20),
                       CustomButton(
-                          width: 200 / 393 * _deviceWidth,
-                          height: 50,
-                          child: Text(
-                            'Restart Game',
-                            style: Theme.of(context)
-                                .primaryTextTheme
-                                .headline2!
-                                .copyWith(color: Colors.white),
-                          ),
-                          onPressed: _restartGame),
-                      const SizedBox(height: 20),
-                      CustomButton(
                         width: 200 / 393 * _deviceWidth,
                         height: 50,
                         child: Text(
-                          'Main Menu',
+                          'Restart Game',
                           style: Theme.of(context)
                               .primaryTextTheme
                               .headline2!
                               .copyWith(color: Colors.white),
                         ),
-                        onPressed: () {},
+                        onPressed: _resetBoard,
                       ),
+                      const SizedBox(height: 20),
+                      CustomButton(
+                          width: 200 / 393 * _deviceWidth,
+                          height: 50,
+                          child: Text(
+                            'Main Menu',
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .headline2!
+                                .copyWith(color: Colors.white),
+                          ),
+                          onPressed: () async {
+                            final doExit = await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return const ExitGameDialog(
+                                        title: 'Exit Game',
+                                        content:
+                                            'Are you sure you want to quit to main menu?',
+                                      );
+                                    }) ??
+                                false;
+                            if (doExit) {
+                              Navigator.of(context).pop();
+                            }
+                          }),
                     ],
                   ),
                 ),

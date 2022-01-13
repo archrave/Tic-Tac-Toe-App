@@ -1,10 +1,12 @@
 import 'dart:developer' as dev;
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import '../widgets/griditem.dart';
+
 import '../widgets/helper_widgets.dart';
-import 'dart:math';
+import '../widgets/griditem.dart';
+import '../widgets/gameover_menu.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({Key? key}) : super(key: key);
@@ -206,6 +208,7 @@ class _GameScreenState extends State<GameScreen> {
     final _deviceWidth = MediaQuery.of(context).size.width;
     final _deviceHeight =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+
     return WillPopScope(
       onWillPop: _onBackButtonPressed,
       child: Scaffold(
@@ -267,54 +270,10 @@ class _GameScreenState extends State<GameScreen> {
                     ),
                   ],
                 )
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(_winnerMessage,
-                          style: Theme.of(context).primaryTextTheme.headline1),
-                      const SizedBox(height: 20),
-                      CustomButton(
-                        width: 200 / 393 * _deviceWidth,
-                        height: 50,
-                        child: Text(
-                          'Restart Game',
-                          style: Theme.of(context)
-                              .primaryTextTheme
-                              .headline2!
-                              .copyWith(color: Colors.white),
-                        ),
-                        onPressed: _resetBoard,
-                      ),
-                      const SizedBox(height: 20),
-                      CustomButton(
-                          width: 200 / 393 * _deviceWidth,
-                          height: 50,
-                          child: Text(
-                            'Main Menu',
-                            style: Theme.of(context)
-                                .primaryTextTheme
-                                .headline2!
-                                .copyWith(color: Colors.white),
-                          ),
-                          onPressed: () async {
-                            final doExit = await showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return const ExitGameDialog(
-                                        title: 'Exit Game',
-                                        content:
-                                            'Are you sure you want to quit to main menu?',
-                                      );
-                                    }) ??
-                                false;
-                            if (doExit) {
-                              Navigator.of(context).pop();
-                            }
-                          }),
-                    ],
-                  ),
-                ),
+              : GameOverMenu(
+                  winnerMessage: _winnerMessage,
+                  deviceWidth: _deviceWidth,
+                  resetBoard: _resetBoard),
         ),
       ),
     );

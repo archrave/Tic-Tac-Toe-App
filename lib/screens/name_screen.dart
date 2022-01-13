@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '/screens/welcome_screen.dart';
 import '../widgets/helper_widgets.dart';
 
@@ -10,14 +13,26 @@ class NameScreen extends StatefulWidget {
 }
 
 class _NameScreenState extends State<NameScreen> {
+  String _playerName = '';
+
   final TextEditingController? _nameController = TextEditingController();
   final _nameFormKey = GlobalKey<FormState>();
-  void _submitName() {
+
+  void _submitName() async {
     if (!_nameFormKey.currentState!.validate()) {
       return;
     }
-    Navigator.of(context).pushReplacementNamed(WelcomeScreen.routeName,
-        arguments: _nameController!.text);
+    _playerName = _nameController!.text;
+    var _sharedprefs = await SharedPreferences.getInstance();
+    _sharedprefs.setString('player_name', _playerName);
+    log('hi just before navigator');
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (BuildContext ctx) => WelcomeScreen(
+          playerName: _playerName,
+        ),
+      ),
+    );
   }
 
   @override
@@ -41,9 +56,12 @@ class _NameScreenState extends State<NameScreen> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            constraints: const BoxConstraints(maxWidth: 500),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
+                  flex: 3,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 10.0),
                     child: Form(
@@ -79,12 +97,19 @@ class _NameScreenState extends State<NameScreen> {
                     ),
                   ),
                 ),
-                CustomButton(
-                    width: 100 / 393 * _deviceWidth,
-                    height: 55,
-                    borderRadius: 50,
-                    child: const Icon(Icons.arrow_forward),
-                    onPressed: _submitName),
+                Expanded(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: CustomButton(
+                      width: 100 / 393 * _deviceWidth,
+                      height: 55,
+                      borderRadius: 50,
+                      child: const Icon(Icons.arrow_forward),
+                      onPressed: _submitName,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

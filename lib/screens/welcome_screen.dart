@@ -5,17 +5,24 @@ import '../widgets/helper_widgets.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const routeName = '/welcome-screen';
+
+  const WelcomeScreen({
+    required this.playerName,
+  });
+
+  final String? playerName;
+
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  String playerName = '';
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    playerName = ModalRoute.of(context)!.settings.arguments as String;
-  }
+  // String widget.playerName = '';
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   widget.playerName = ModalRoute.of(context)!.settings.arguments as String;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +54,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     .copyWith(color: Colors.white),
               ),
               onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(GameScreen.routeName, arguments: playerName);
+                Navigator.of(context).pushNamed(GameScreen.routeName,
+                    arguments: widget.playerName);
               }),
         ],
       ),

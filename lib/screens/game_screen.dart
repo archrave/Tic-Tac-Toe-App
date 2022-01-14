@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/helper_widgets.dart';
 import '../widgets/griditem.dart';
 import '../widgets/gameover_menu.dart';
+import '../widgets/decoration.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({Key? key}) : super(key: key);
@@ -57,7 +58,7 @@ class _GameScreenState extends State<GameScreen> {
             }) ??
         false;
     if (doExit) {
-      Navigator.of(context).pop();
+      exit(0);
     }
   }
 
@@ -242,96 +243,104 @@ class _GameScreenState extends State<GameScreen> {
       onWillPop: _onBackButtonPressed,
       child: SafeArea(
         child: Scaffold(
-          body: Container(
-            padding: const EdgeInsets.all(20),
-            child: !_isMatchFinished
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          body: Stack(
+            children: [
+              ...XODecoration().gameDecoratedItems,
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: !_isMatchFinished
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: _exitToMenu,
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              FontAwesomeIcons.question,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: PlayerVsComputer(playerName: _playerName),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Stack(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              constraints: const BoxConstraints(
-                                  maxWidth: 500, maxHeight: 500),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white,
-                              ),
-                              height: _deviceWidth - 60,
-                              child: GridView.builder(
-                                  padding: const EdgeInsets.all(0),
-                                  semanticChildCount: 9,
-                                  gridDelegate:
-                                      SliverGridDelegateWithMaxCrossAxisExtent(
-                                    maxCrossAxisExtent: 1 / 3 * (_deviceWidth),
-                                  ),
-                                  itemCount: 9,
-                                  itemBuilder: (ctx, i) {
-                                    return GridItem(
-                                        index: i,
-                                        marker: board[i],
-                                        buttonSelected: _runPlayersTurn);
-                                  }),
-                            ),
-                            VerticalLines(deviceWidth: _deviceWidth),
-                            HorizontalLines(deviceWidth: _deviceWidth)
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              DarkIconButton(
-                                onPressed: _restartGame,
-                                icon: const Icon(FontAwesomeIcons.redo),
-                                size: 80,
-                              ),
-                              DarkIconButton(
+                              IconButton(
                                 onPressed: _exitToMenu,
-                                icon: const Icon(Icons.home),
-                                size: 80,
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  FontAwesomeIcons.question,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                             ],
                           ),
-                        ),
+                          Expanded(
+                            child: PlayerVsComputer(playerName: _playerName),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  constraints: const BoxConstraints(
+                                      maxWidth: 500, maxHeight: 500),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.white,
+                                  ),
+                                  height: _deviceWidth - 60,
+                                  child: GridView.builder(
+                                      padding: const EdgeInsets.all(0),
+                                      semanticChildCount: 9,
+                                      gridDelegate:
+                                          SliverGridDelegateWithMaxCrossAxisExtent(
+                                        maxCrossAxisExtent:
+                                            1 / 3 * (_deviceWidth),
+                                      ),
+                                      itemCount: 9,
+                                      itemBuilder: (ctx, i) {
+                                        return GridItem(
+                                            index: i,
+                                            marker: board[i],
+                                            buttonSelected: _runPlayersTurn);
+                                      }),
+                                ),
+                                VerticalLines(deviceWidth: _deviceWidth),
+                                HorizontalLines(deviceWidth: _deviceWidth)
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  DarkIconButton(
+                                    onPressed: _restartGame,
+                                    icon: const Icon(FontAwesomeIcons.redo),
+                                    size: 80,
+                                  ),
+                                  DarkIconButton(
+                                    onPressed: _exitToMenu,
+                                    icon: const Icon(Icons.home),
+                                    size: 80,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : GameOverMenu(
+                        winnerMessage: _winnerMessage,
+                        deviceWidth: _deviceWidth,
+                        resetBoard: _resetBoard,
+                        exitToMainMenu: _exitToMenu,
+                        exitToHomeScreen: _exitToHomeScreen,
                       ),
-                    ],
-                  )
-                : GameOverMenu(
-                    winnerMessage: _winnerMessage,
-                    deviceWidth: _deviceWidth,
-                    resetBoard: _resetBoard,
-                    exitToMainMenu: _exitToMenu,
-                    exitToHomeScreen: _exitToHomeScreen,
-                  ),
+              ),
+            ],
           ),
         ),
       ),

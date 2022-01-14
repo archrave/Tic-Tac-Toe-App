@@ -12,6 +12,7 @@ class CustomButton extends StatelessWidget {
     required this.child,
     required this.onPressed,
     this.borderRadius = 8.0,
+    this.isActive = true,
   });
 
   final double width;
@@ -19,6 +20,7 @@ class CustomButton extends StatelessWidget {
   final Widget child;
   final VoidCallback? onPressed;
   final double borderRadius;
+  final bool isActive;
 
   final color1 = const Color(0xFF6B79F2);
   final color2 = const Color(0xFF4351D8);
@@ -28,22 +30,27 @@ class CustomButton extends StatelessWidget {
     return Container(
       width: (height == 0 && width == 0) ? null : width,
       height: (height == 0 && width == 0) ? null : height,
-      decoration: onPressed != null
-          ? BoxDecoration(
-              gradient:
-                  //  onPressed != null?
-                  LinearGradient(
-                colors: [
-                  color1,
-                  color2,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              // : null,
-
-              borderRadius: BorderRadius.circular(borderRadius),
-            )
+      decoration: (onPressed != null)
+          ? isActive
+              ? BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      color1,
+                      color2,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                )
+              : BoxDecoration(
+                  borderRadius: BorderRadius.circular(borderRadius),
+                  color: Colors.white,
+                  border: Border.all(
+                    width: 2,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                )
           : BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius),
             ),

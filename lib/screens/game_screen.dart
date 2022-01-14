@@ -9,6 +9,7 @@ import '../widgets/helper_widgets.dart';
 import '../widgets/griditem.dart';
 import '../widgets/gameover_menu.dart';
 import '../widgets/decoration.dart';
+import './rules_screen.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({Key? key}) : super(key: key);
@@ -263,7 +264,8 @@ class _GameScreenState extends State<GameScreen> {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () => Navigator.pushNamed(
+                                    context, RulesScreen.routeName),
                                 icon: Icon(
                                   FontAwesomeIcons.question,
                                   color: Theme.of(context).primaryColor,

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../widgets/decoration.dart';
 
+import '../widgets/decoration.dart';
 import '/screens/game_screen.dart';
 import '../widgets/helper_widgets.dart';
+import './rules_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const routeName = '/welcome-screen';
@@ -168,7 +169,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       .primaryVariant,
                                 ),
                           ),
-                          onPressed: () {},
+                          onPressed: () => Navigator.pushNamed(
+                              context, RulesScreen.routeName),
                         ),
                         const SizedBox(height: 20),
                         CustomButton(

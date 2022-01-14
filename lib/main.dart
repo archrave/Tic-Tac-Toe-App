@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import './screens/rules_screen.dart';
 import './screens/game_screen.dart';
 import './screens/welcome_screen.dart';
 import './screens/name_screen.dart';
@@ -89,9 +91,9 @@ class MyApp extends StatelessWidget {
         // NameScreen.routeName: (ctx) => NameScreen(),
         // WelcomeScreen.routeName: (ctx) => WelcomeScreen(),
         GameScreen.routeName: (ctx) => const GameScreen(),
+        RulesScreen.routeName: (ctx) => const RulesScreen(),
       },
       debugShowCheckedModeBanner: false,
-      // home: NameScreen(),
     );
   }
 }

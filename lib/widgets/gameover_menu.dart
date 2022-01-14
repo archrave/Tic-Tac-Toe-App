@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import './helper_widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../screens/rules_screen.dart';
+import './helper_widgets.dart';
 
 class GameOverMenu extends StatelessWidget {
   const GameOverMenu({
@@ -69,20 +71,9 @@ class GameOverMenu extends StatelessWidget {
                       size: 80,
                     ),
                     DarkIconButton(
-                      onPressed: () {},
-                      icon: FittedBox(
-                        fit: BoxFit.cover,
-                        child: Text(
-                          '?',
-                          style: Theme.of(context)
-                              .primaryTextTheme
-                              .headline1!
-                              .copyWith(
-                                fontSize: 40,
-                                color: Colors.white,
-                              ),
-                        ),
-                      ),
+                      onPressed: () => Navigator.of(context)
+                          .pushNamed(RulesScreen.routeName),
+                      icon: const Icon(FontAwesomeIcons.question),
                       size: 80,
                     ),
                   ],

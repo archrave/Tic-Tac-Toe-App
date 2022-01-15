@@ -73,15 +73,86 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   ),
                                 ],
                               ),
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: Center(
-                                  child: Text(widget.playerName![0],
+                              child: Center(
+                                child: PopupMenuButton(
+                                  onSelected: (selectedValue) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Are you sure',
+                                            style: Theme.of(context)
+                                                .primaryTextTheme
+                                                .headline2,
+                                          ),
+                                          content: Text(
+                                            'Are you sure you want to change your entered name?',
+                                            style: Theme.of(context)
+                                                .primaryTextTheme
+                                                .bodyText2!
+                                                .copyWith(fontSize: 14),
+                                          ),
+                                          actions: [
+                                            ElevatedButton(
+                                              child: const Text('YES'),
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                  Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pushReplacementNamed(
+                                                        NameScreen.routeName);
+                                              },
+                                            ),
+                                            TextButton(
+                                              child: const Text('NO'),
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                              style: ButtonStyle(
+                                                foregroundColor:
+                                                    MaterialStateProperty.all(
+                                                  Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  icon: Text(widget.playerName![0],
                                       style: Theme.of(context)
                                           .primaryTextTheme
                                           .headline1),
+                                  itemBuilder: (_) => [
+                                    PopupMenuItem(
+                                      child: Text(
+                                        'Change Name',
+                                        style: Theme.of(context)
+                                            .primaryTextTheme
+                                            .bodyText2!,
+                                      ),
+                                      value: 'Change Name',
+                                    ),
+                                  ],
                                 ),
                               ),
+
+                              // IconButton(
+                              //   onPressed: () {},
+                              //   icon: Center(
+                              // child: Text(widget.playerName![0],
+                              //     style: Theme.of(context)
+                              //         .primaryTextTheme
+                              //         .headline1),
+                              //   ),
+                              // ),
                             ),
                           ),
                         ),

@@ -262,19 +262,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 ),
                           ),
                           onPressed: () async {
-                            final doExit = await showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return const ExitGameDialog(
-                                        title: 'Quit Game',
-                                        content:
-                                            'Are you sure you want to quit?',
-                                      );
-                                    }) ??
-                                false;
-                            if (doExit) {
-                              Navigator.of(context).pop();
-                            }
+                            // final doExit = await
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const ExitGameDialog(
+                                  title: 'Quit Game',
+                                  content: 'Are you sure you want to quit?',
+                                  exitToHomeScreen: true,
+                                );
+                              },
+                            );
+                            //         ??
+                            //     false;
+                            // if (doExit) {
+                            //   Navigator.of(context).pop();
+                            // }
                           },
                         ),
                       ],

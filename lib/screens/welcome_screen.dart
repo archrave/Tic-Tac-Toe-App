@@ -3,11 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../widgets/decoration.dart';
-import '/screens/game_screen.dart';
-import '../widgets/helper_widgets.dart';
+import './game_screen.dart';
 import './rules_screen.dart';
 import './name_screen.dart';
+import '../widgets/decoration.dart';
+import '../widgets/helper_widgets.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const routeName = '/welcome-screen';

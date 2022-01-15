@@ -5,11 +5,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import './rules_screen.dart';
 import '../widgets/helper_widgets.dart';
 import '../widgets/griditem.dart';
 import '../widgets/gameover_menu.dart';
 import '../widgets/decoration.dart';
-import './rules_screen.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({Key? key}) : super(key: key);

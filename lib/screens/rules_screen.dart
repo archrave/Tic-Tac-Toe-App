@@ -40,7 +40,7 @@ class RulesScreen extends StatelessWidget {
                           'Click on any empty box on the grid to mark it as yours.'),
                   const RuleText(
                       text:
-                          'The first player to get 3 of theier marks in a row (up, down, across, or diagonally) is the winner.'),
+                          'The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.'),
                   const RuleText(
                       text:
                           'When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a draw.'),

@@ -28,20 +28,22 @@ class _GridItemState extends State<GridItem> {
       color: Colors.white,
       child: widget.marker == ButtonMarker.player
           ? Container(
-              height: 50 / 393 * _deviceWidth,
-              width: 50 / 393 * _deviceWidth,
-              child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: SvgPicture.asset('assets/images/X.svg')),
+              child: SvgPicture.asset(
+                'assets/images/X.svg',
+                fit: BoxFit.scaleDown,
+                width: 60,
+                height: 60,
+              ),
             )
           // ? Icon(Icons.close, size: 70 / 393 * _deviceWidth, color: Colors.blue)
           : (widget.marker == ButtonMarker.computer
               ? Container(
-                  height: 50 / 393 * _deviceWidth,
-                  width: 50 / 393 * _deviceWidth,
-                  child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: SvgPicture.asset('assets/images/O.svg')),
+                  child: SvgPicture.asset(
+                    'assets/images/O.svg',
+                    fit: BoxFit.scaleDown,
+                    width: 60,
+                    height: 60,
+                  ),
                 )
               // Icon(Icons.circle_outlined,
               //     size: 70 / 393 * _deviceWidth, color: Colors.red)

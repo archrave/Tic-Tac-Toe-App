@@ -45,7 +45,7 @@ class CustomButton extends StatelessWidget {
                 )
               : BoxDecoration(
                   borderRadius: BorderRadius.circular(borderRadius),
-                  color: Colors.white,
+                  color: Colors.white.withOpacity(0.6),
                   border: Border.all(
                     width: 2,
                     color: Theme.of(context).colorScheme.primary,
@@ -88,6 +88,7 @@ class HorizontalLines extends StatelessWidget {
       left: 10,
       top: 10,
       child: Container(
+        constraints: const BoxConstraints(maxWidth: 500),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -96,12 +97,14 @@ class HorizontalLines extends StatelessWidget {
               width: _deviceWidth - 80,
               height: 2,
               color: Colors.black.withOpacity(0.2),
+              constraints: const BoxConstraints(maxWidth: 500),
             ),
             SizedBox(height: (gridItemSize) - 2),
             Container(
               width: _deviceWidth - 80,
               height: 2,
               color: Colors.black.withOpacity(0.2),
+              constraints: const BoxConstraints(maxWidth: 500),
             ),
           ],
         ),
@@ -126,6 +129,7 @@ class VerticalLines extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(10),
         // color: Colors.green,
+        constraints: const BoxConstraints(maxHeight: 500),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,11 +138,13 @@ class VerticalLines extends StatelessWidget {
               height: _deviceWidth - 80,
               width: 2,
               color: Colors.black.withOpacity(0.2),
+              constraints: const BoxConstraints(maxHeight: 500),
             ),
             Container(
               height: _deviceWidth - 80,
               width: 2,
               color: Colors.black.withOpacity(0.2),
+              constraints: const BoxConstraints(maxHeight: 500),
             ),
           ],
         ),
@@ -276,13 +282,20 @@ class DarkIconButton extends StatelessWidget {
       decoration: ShapeDecoration(
         color: Theme.of(context).primaryColor,
         shape: const CircleBorder(),
+        shadows: const [
+          BoxShadow(
+            offset: Offset(2, 2),
+            blurRadius: 2,
+            spreadRadius: 2,
+            color: Colors.black12,
+          ),
+        ],
       ),
       child: IconButton(
         onPressed: onPressed,
         icon: icon,
         iconSize: 40,
         color: Colors.white,
-
         // splashColor: Colors.blueGrey,
       ),
     );

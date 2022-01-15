@@ -7,6 +7,7 @@ import '../widgets/decoration.dart';
 import '/screens/game_screen.dart';
 import '../widgets/helper_widgets.dart';
 import './rules_screen.dart';
+import './name_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const routeName = '/welcome-screen';

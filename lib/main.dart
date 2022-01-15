@@ -88,8 +88,8 @@ class MyApp extends StatelessWidget {
               }
             }),
 
-        // NameScreen.routeName: (ctx) => NameScreen(),
         // WelcomeScreen.routeName: (ctx) => WelcomeScreen(),
+        NameScreen.routeName: (ctx) => NameScreen(),
         GameScreen.routeName: (ctx) => const GameScreen(),
         RulesScreen.routeName: (ctx) => const RulesScreen(),
       },

@@ -115,11 +115,21 @@ class _GameScreenState extends State<GameScreen> {
   // Helper function to count the remaining spaces, so that the computer can mark its turn on one of these.
   void _countAvailbleSpaces() {
     _availableSpaces = [];
-    for (int i = 0; i < board.length; i++) {
+    for (int i = 0; i < 9; i++) {
       if (board[i] == ButtonMarker.available) {
         _availableSpaces.add(i);
       }
     }
+  }
+
+  int _countAvailbleSpacesBTS() {
+    int count = 0;
+    for (int i = 0; i < 9; i++) {
+      if (board[i] == ButtonMarker.available) {
+        count++;
+      }
+    }
+    return count;
   }
 
 // Runs when the player presses on an available space on the screen
@@ -138,22 +148,26 @@ class _GameScreenState extends State<GameScreen> {
 
 //Runs after the player's turn
   void _runComputersTurn() {
-    _countAvailbleSpaces();
-    dev.log('Available Spaces: $_availableSpaces');
-    if (_availableSpaces.isEmpty) return;
-    Random random = Random();
-    int randomNumber = random.nextInt(_availableSpaces.length);
-    dev.log('randomNumber = $randomNumber');
-    setState(() {
-      board[_availableSpaces[randomNumber]] = ButtonMarker.computer;
-    });
-    dev.log('Computer marked O on ${_availableSpaces[randomNumber]}\n');
+    _computersBestMove();
+    // ************** CODE TO CHOOSE A RANDOM MOVE *********************
+
+    // _countAvailbleSpaces();
+    // dev.log('Available Spaces: $_availableSpaces');
+    // if (_availableSpaces.isEmpty) return;
+    // Random random = Random();
+    // int randomNumber = random.nextInt(_availableSpaces.length);
+    // dev.log('randomNumber = $randomNumber');
+    // setState(() {
+    //   board[_availableSpaces[randomNumber]] = ButtonMarker.computer;
+    // });
+    // dev.log('Computer marked O on ${_availableSpaces[randomNumber]}\n');
     _checkWinner();
   }
 
   void _checkWinner() {
     _countAvailbleSpaces();
-
+    dev.log(_availableSpaces.toString());
+    dev.log(board.toString());
     // If the avaiable spaces are more than four, i.e, if the total turns yet are less than 5, there possibly cannot be a winner yet.
     if (_availableSpaces.length > 4) {
       return;
@@ -180,8 +194,43 @@ class _GameScreenState extends State<GameScreen> {
     else if (board[2] == board[4] && board[4] == board[6]) {
       _announceWinner(board[2]);
     } else if (_availableSpaces.isEmpty) {
-      dev.log('######################Avialable spaces = $_availableSpaces');
+      dev.log('##########        Available spaces = $_availableSpaces');
       _announceWinner(ButtonMarker.available);
+    }
+  }
+
+  String? _checkWinnerBTS() {
+    int totalAvailableSpaces = _countAvailbleSpacesBTS();
+
+    // If the avaiable spaces are more than four, i.e, if the total turns yet are less than 5, there possibly cannot be a winner yet.
+    if (totalAvailableSpaces > 4) {
+      return null;
+    }
+    // Asking to announce a draw
+    else if (checkRow(0)) {
+      return board[0].toString();
+    } else if (checkRow(3)) {
+      return board[3].toString();
+    } else if (checkRow(6)) {
+      return board[6].toString();
+    } else if (checkColumn(0)) {
+      return board[0].toString();
+    } else if (checkColumn(1)) {
+      return board[1].toString();
+    } else if (checkColumn(2)) {
+      return board[2].toString();
+    }
+    // Checking for Diagonal 1
+    else if (board[0] == board[4] && board[4] == board[8]) {
+      return board[0].toString();
+    }
+    //Checking for Diagonal 2
+    else if (board[2] == board[4] && board[4] == board[6]) {
+      return board[2].toString();
+    } else if (totalAvailableSpaces == 0) {
+      return 'ButtonMarker.available';
+    } else {
+      return null;
     }
   }
 
@@ -225,6 +274,66 @@ class _GameScreenState extends State<GameScreen> {
     for (int i = 0; i < 9; i++) {
       board.add(ButtonMarker.available);
       _availableSpaces.add(i);
+    }
+  }
+
+  void _computersBestMove() {
+    var bestScore = -100;
+    var move;
+    for (int i = 0; i < 9; i++) {
+      // Is the spot available
+      if (board[i] == ButtonMarker.available) {
+        board[i] = ButtonMarker.computer;
+        var score = miniMax(board, 0, false);
+        //Undoing the move so as to not change the global value of the board
+        board[i] = ButtonMarker.available;
+        if (score > bestScore) {
+          bestScore = score;
+          move = i;
+        }
+      }
+    }
+    setState(() {
+      if (move != null) {
+        board[move] = ButtonMarker.computer;
+        dev.log('Computer marked O on $move\n');
+      }
+    });
+  }
+
+  Map<String, int> scores = {
+    'ButtonMarker.player': -1,
+    'ButtonMarker.computer': 1,
+    'ButtonMarker.available': 0,
+  };
+
+  int miniMax(List boardCopy, int depth, bool isMaximizing) {
+    String? winner = _checkWinnerBTS();
+    if (winner != null) {
+      return scores[winner]!;
+    }
+    if (isMaximizing) {
+      var bestScore = -100;
+      for (int i = 0; i < 9; i++) {
+        if (boardCopy[i] == ButtonMarker.available) {
+          boardCopy[i] = ButtonMarker.computer;
+          var score = miniMax(boardCopy, depth + 1, false);
+          boardCopy[i] = ButtonMarker.available;
+          bestScore = max(score, bestScore);
+        }
+      }
+      return bestScore;
+    } else {
+      var bestScore = 100;
+      for (int i = 0; i < 9; i++) {
+        if (boardCopy[i] == ButtonMarker.available) {
+          boardCopy[i] = ButtonMarker.player;
+          var score = miniMax(boardCopy, depth + 1, true);
+          boardCopy[i] = ButtonMarker.available;
+          bestScore = min(score, bestScore);
+        }
+      }
+      return bestScore;
     }
   }
 

@@ -148,7 +148,28 @@ class _GameScreenState extends State<GameScreen> {
 
 //Runs after the player's turn
   void _runComputersTurn() {
-    _computersBestMove();
+    _countAvailbleSpaces();
+
+    if (_availableSpaces.length == 8) {
+      Random random = Random();
+      int randomNumber = random.nextInt(3);
+      // 2/3 probablity that the computer's going to play optimally
+      List<int> probablityList = [1, 1, 0];
+      if (probablityList[randomNumber] == 1) {
+        _computersBestMove();
+      } else {
+        int randomNumber = random.nextInt(_availableSpaces.length);
+        setState(() {
+          board[_availableSpaces[randomNumber]] = ButtonMarker.computer;
+        });
+        dev.log('Computer marked O on ${_availableSpaces[randomNumber]}\n');
+      }
+    } else {
+      _computersBestMove();
+    }
+
+    // Random random = Random();
+
     // ************** CODE TO CHOOSE A RANDOM MOVE *********************
 
     // _countAvailbleSpaces();
@@ -161,6 +182,7 @@ class _GameScreenState extends State<GameScreen> {
     //   board[_availableSpaces[randomNumber]] = ButtonMarker.computer;
     // });
     // dev.log('Computer marked O on ${_availableSpaces[randomNumber]}\n');
+
     _checkWinner();
   }
 
